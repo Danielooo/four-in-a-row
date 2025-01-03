@@ -33,7 +33,8 @@ if __name__ == '__main__':
 
     grid[5][0] = 1
 
-    player_move(0)
+    player_input = int(input("Enter your x position (0-6): "))
+    player_move(player_input)
 
     for row in grid:
         print(row)
