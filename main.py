@@ -24,13 +24,85 @@ def print_grid():
 
 
 def computer_move():
-    drop_chip(3)
+    check_three_blockable()
+    drop_chip(5)
+    pass
+
+
+
+def check_three_blockable():
+    result = check_three_in_a_row(grid, player_sign)
+    if result:
+        y, x = result
+    print("Result", result)
+    if result:
+        print("possible win at", result)
+        if possible_block_left(result):
+            print("Block left")
+            print(is_bottom_or_chip_below(y, x - 3))
+            if is_bottom_or_chip_below(y, x - 3):
+
+                print(y, x - 3)
+                print("doable")
+                drop_chip(x-3)
+        elif possible_block_right(result):
+            return (x, y + 1)
+        else: 
+            print("No block possible")
+            return False
+
+
+
+def is_bottom_or_chip_below(y, x):
+    print(y, x)
+    print(y + 1 < 6)
+    if y == len(grid) - 1:
+        return True
+    elif grid[y + 1][x] != 0:
+        return True
+    else:
+        return False
+
+
+
+def possible_block_left(result):
+    y, x = result
+    if x - 3 < 0:
+        return False
+    if grid[y][x - 3] == 0:
+        return True
+    else:
+        return False
+    
+
+def possible_block_right(result):
+    y, x = result
+    if x + 1 > 6:
+        return False
+    if grid[result[0]][result[1] + 1] == 0:
+        return True
+    else:
+        return False
+
+
+def check_three_in_a_row(grid, player_sign):
+    for y in range(len(grid)):
+        count = 0  # Reset count at the start of each row
+        for x in range(len(grid[y])):
+            if grid[y][x] == player_sign:
+                count += 1
+                print("Count", count)
+                if count == 3:
+                    return (y, x)
+            else:
+                count = 0  # Reset count when a non-matching cell is encountered
+    return False
 
 
 if __name__ == '__main__':
     grid = [[0 for _ in range(7)] for _ in range(6)]
 
-    grid[5][0] = 2
+    # grid[5][0] = 2
 
     print_grid()
 
@@ -38,6 +110,7 @@ if __name__ == '__main__':
         if players_turn:
             player_input = int(input("Enter your x position (0-6): "))
             player_move(player_input)
+            
         else:
             computer_move()
         
@@ -47,7 +120,6 @@ if __name__ == '__main__':
             break
 
         players_turn = not players_turn
-        print("Player's turn", players_turn)
 
 
 
